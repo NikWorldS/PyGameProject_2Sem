@@ -1,6 +1,5 @@
-from pygame.sprite import spritecollide, spritecollideany
-
-from settings import WIDTH, HEIGHT, PLAYER_SPEED, GREEN
+from models.inventory import Inventory
+from settings import PLAYER_SPEED
 import pygame as pg
 
 
@@ -9,20 +8,20 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         super().__init__(self.groups)
         self.game = game
-        self.velocity = pg.Vector2(0, 0)
         self.pos = pg.Vector2(x, y)
         self.rect = pg.Rect(self.pos.x, self.pos.y, 32, 32)
         self.delta_pos = pg.Vector2(0, 0)
         self.image = pg.image.load
+        self.inventory = Inventory(self.game.assets, push_alert=self.game.msg_manager.add_message)
 
 
-    def move(self, velocity):
-        self.velocity = velocity
-        self.pos.x += self.velocity.x * PLAYER_SPEED * self.game.dt
+    def move(self, delta_pos):
+        self.delta_pos = delta_pos
+        self.pos.x += self.delta_pos.x * PLAYER_SPEED * self.game.dt
         self.rect.topleft = self.pos
         self.collide_with_obstacle('x')
 
-        self.pos.y += self.velocity.y * PLAYER_SPEED * self.game.dt
+        self.pos.y += self.delta_pos.y * PLAYER_SPEED * self.game.dt
         self.rect.topleft = self.pos
         self.collide_with_obstacle('y')
 
@@ -33,16 +32,21 @@ class Player(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, self.game.obstacles, False)
         if hits:
             if direction == 'x':
-                if self.velocity.x > 0:
+                if self.delta_pos.x > 0:
                     self.pos.x = hits[0].rect.left - self.rect.width
-                if self.velocity.x < 0:
+                if self.delta_pos.x < 0:
                     self.pos.x = hits[0].rect.right
-                self.velocity.x = 0
+                self.delta_pos.x = 0
             elif direction == 'y':
-                if self.velocity.y > 0:
+                if self.delta_pos.y > 0:
                     self.pos.y = hits[0].rect.top - self.rect.height
-                if self.velocity.y < 0:
+                if self.delta_pos.y < 0:
                     self.pos.y = hits[0].rect.bottom
-                self.velocity.y = 0
+                self.delta_pos.y = 0
 
         self.rect.topleft = self.pos
+
+
+    def update(self):
+        pass
+    #     self.inventory.update(self.game.screen)

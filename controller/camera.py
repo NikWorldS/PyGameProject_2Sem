@@ -11,8 +11,8 @@ class Camera:
 
 
     def update(self, target):
-        desired_x = -target.centerx + WIDTH // 2
-        desired_y = -target.centery + HEIGHT // 2
+        desired_x = -target.rect.centerx + WIDTH // 2
+        desired_y = -target.rect.centery + HEIGHT // 2
 
         self.offset.x += (desired_x - self.offset.x) * 0.03
         self.offset.y += (desired_y - self.offset.y) * 0.03
