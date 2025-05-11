@@ -8,7 +8,7 @@ from models.wall import Obstacle
 from view.map import TiledMap
 from settings import *
 from view.renderer import Renderer
-from view.MessageBox import MessageManager
+from models.message_manager import MessageManager
 from view.assetManager import AssetManager
 
 
