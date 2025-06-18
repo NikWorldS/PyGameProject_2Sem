@@ -2,10 +2,14 @@ from sys import exit as sys_exit
 from os import path
 import pygame as pg
 
+from controller.a_star_showcase import AStarShowcase
 from controller.rod_manager import RodManager
 from models.message_manager import MessageManager
+from models.path_finder import PathFinder
 from models.player import Player
 from models.wall import Obstacle
+from utils.map_utils import get_collision_grid
+from view.a_star_renderer import AStarRenderer
 from view.fishing_renderer import FishingRenderer
 from view.inventory_renderer import InventoryRenderer
 from view.player_renderer import PlayerRenderer
@@ -19,8 +23,8 @@ from settings import *
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
         self.load_data()
         self.assets = AssetManager()
@@ -35,6 +39,7 @@ class Game:
 
     def new(self):
         self.msg_manager = MessageManager()
+        self.rod_manager = RodManager()
 
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
@@ -49,12 +54,13 @@ class Game:
         self.player_renderer = PlayerRenderer(self.screen, self.player, self.assets)
         self.inventory_renderer = InventoryRenderer(self.screen, self.player.inventory, self.assets)
         self.fishing_renderer = FishingRenderer(self.screen, self.assets)
+        self.a_star_renderer = AStarRenderer(self.screen)
 
         self.camera = Camera(self.map.width, self.map.height)
+        self.a_star_showcase = AStarShowcase()
+
         self.player_controller = PlayerController()
         self.inventory_controller = InventoryController(self.player.inventory, self.inventory_renderer)
-        self.rod_manager = RodManager()
-
 
     def run(self):
         self.playing = True
@@ -75,40 +81,30 @@ class Game:
         self.player.update()
         self.rod_manager.update(self.player, self.dt)
         self.inventory_controller.update()
-
-    def __draw_grid(self):
-        for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+        self.a_star_showcase.update(self.map.get_tmx_data(), self.player.rect.center)
 
     def events(self):
         for event in pg.event.get():
             self.inventory_controller.handle_event(event)
             self.rod_manager.handle_event(event, self.player.rect, self.camera)
+            self.a_star_showcase.handle_event(event)
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_F1:
                     self.draw_debug = not self.draw_debug
-                if event.key == pg.K_TAB:
-                    self.player.inventory.is_inventory_open = not self.player.inventory.is_inventory_open
-                if event.key == pg.K_F2:
-                    self.player.inventory._test_add_item()
-                if event.key == pg.K_F3:
-                    pass
 
     def draw(self):
         mouse_pos = pg.mouse.get_pos()
 
         self.screen.fill(BLACK)
-        self.__draw_grid()
         self.screen.blit(self.map_image, self.camera.apply_rect(self.map_rect))
         self.inventory_renderer.render_inventory(mouse_pos)
         self.fishing_renderer.draw(self.player, self.camera.offset, self.rod_manager.get_hook_pos(), self.rod_manager.get_line_points())
         self.player_renderer.draw_player(self.camera)
         self.msg_manager.draw(self.screen)
 
+        self.a_star_renderer.draw_path(self.a_star_showcase.get_path(), self.camera.offset)
 
         if self.draw_debug:
             pg.draw.rect(self.screen, WHITE, self.camera.apply(self.player), 2)
@@ -116,6 +112,7 @@ class Game:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(sprite.rect), 1)
 
         pg.display.flip()
+
 
 
 game = Game()

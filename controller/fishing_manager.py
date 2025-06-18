@@ -1,0 +1,2 @@
+class FishingManager:
+    pass

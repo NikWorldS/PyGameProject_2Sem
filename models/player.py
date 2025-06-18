@@ -1,7 +1,7 @@
 import pygame as pg
 
 from controller.float_rod_controller import FloatRodController
-from models.fishing_models.float_rod import FloatRod
+from models.fishing_rod_models.float_rod import FloatRod
 
 from models.inventory import Inventory
 from models.item_rod import ItemRod

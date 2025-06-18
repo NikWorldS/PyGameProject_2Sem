@@ -56,6 +56,7 @@ class Bobber:
 
 
     def __recalculate_target(self, max_distance, rod_tip_pos):
+        """Перерассчитывает целевые координаты поплавка при сильном удалении от игрока"""
         max_distance_px = max_distance * PIXELS_PER_METER
 
         direction = self.target_pos - rod_tip_pos

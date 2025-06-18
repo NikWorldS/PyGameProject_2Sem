@@ -27,7 +27,6 @@ class Camera:
 
         self.camera = pg.Rect(self.offset.x, self.offset.y, self.map_width, self.map_height)
 
-
     def apply_rect(self, rect):
         return rect.move(self.camera.topleft)
 

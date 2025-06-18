@@ -24,3 +24,6 @@ class TiledMap:
         temp_surface = pg.Surface((self.width, self.height))
         self.render(temp_surface)
         return temp_surface
+
+    def get_tmx_data(self):
+        return self.tmx_data

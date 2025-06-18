@@ -1,5 +1,3 @@
-from pydoc import plain
-
 import pygame as pg
 import os.path
 

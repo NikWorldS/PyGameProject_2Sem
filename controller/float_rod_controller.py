@@ -1,9 +1,9 @@
 import pygame as pg
 
 from controller.rod_controller import RodController
-from models.fishing_models.fishing_line import FishingLine
+from models.fishing_rod_models.fishing_line import FishingLine
 from settings import PIXELS_PER_METER
-from models.fishing_models.bobber import Bobber
+from models.fishing_rod_models.bobber import Bobber
 
 class FloatRodController(RodController):
     def __init__(self, rod_logic):
@@ -20,7 +20,7 @@ class FloatRodController(RodController):
                                self.rod_logic.get_max_throw_distance(),
                                self.rod_logic.rod_tip_pos,
                                )
-            self.line.update(self.rod_logic.rod_tip_pos)
+            self.line.update()
             self.rod_logic.hook_pos = self.bobber.pos
 
         self.rod_logic.update(dt, player_pos)

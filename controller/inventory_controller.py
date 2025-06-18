@@ -11,6 +11,12 @@ class InventoryController:
 
     def handle_event(self, event):
         if event.type == pg.KEYDOWN:
+            if event.key == pg.K_TAB:
+                self.inventory.is_inventory_open = not self.inventory.is_inventory_open
+
+            if event.key == pg.K_F2:
+                self.inventory._test_add_item()
+
             if event.key == pg.K_DELETE:
                 mouse_pos = pg.mouse.get_pos()
                 hovered_index = self.renderer.get_hovered_slot(mouse_pos)

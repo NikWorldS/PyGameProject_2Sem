@@ -1,6 +1,7 @@
 import pygame as pg
 
-from settings import WHITE
+from settings import WHITE, RED
+
 
 class MessageView:
     def __init__(self, message_model):
@@ -25,7 +26,7 @@ class MessageView:
         self.text_surface.set_alpha(alpha)
 
         message_bg = pg.Surface((self.box_width, self.box_height), pg.SRCALPHA)
-        message_bg.fill((255, 0, 0, alpha))
+        message_bg.fill((*RED, alpha))
 
         title_dest = pg.Vector2(20, 5)
         text_dest = pg.Vector2(5, 10)

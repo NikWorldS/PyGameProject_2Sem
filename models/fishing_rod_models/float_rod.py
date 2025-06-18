@@ -2,7 +2,7 @@ import math
 import pygame as pg
 
 from settings import PIXELS_PER_METER
-from models.fishing_models.fishing_rod import FishingRod
+from models.fishing_rod_models.fishing_rod import FishingRod
 
 
 class FloatRod(FishingRod):

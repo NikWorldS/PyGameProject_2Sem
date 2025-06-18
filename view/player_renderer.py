@@ -19,15 +19,13 @@ class PlayerRenderer:
         self._draw_held_item(camera.offset)
 
     def _get_held_item_image(self):
+        """Возвращает изображение предмета"""
         item = self.player.inventory.get_active_item()
         item_image = self.asset_mng.get(item.held_id)
-
-        if not item_image:
-            item_image = self.asset_mng.get('unknown_texture')
-
         return item_image
 
     def _draw_held_item(self, camera_offset):
+        """Рисует активный предмет в руке игрока"""
         active_item = self.player.inventory.get_active_item()
         if self.player.inventory.active_slot is not None and active_item:
             handed_item = self._get_held_item_image()
@@ -36,6 +34,5 @@ class PlayerRenderer:
 
             if isinstance(active_item, ItemRod):
                 pass
-                # fishing_renderer.draw_fishing_rod(active_item.rod_logic, handed_item, hand_pos)
             else:
                 self.screen.blit(handed_item, hand_pos)

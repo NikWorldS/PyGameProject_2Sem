@@ -11,10 +11,11 @@ class FishingLine:
 
         self.line_points = []
 
-    def update(self, player_pos):
-        self.calculate_line_points(player_pos)
+    def update(self):
+        self.calculate_line_points()
 
-    def calculate_line_points(self, player_pos):
+    def calculate_line_points(self):
+        """Рассчитывает точки сегментов лески"""
         rod_tip_pos = self.rod_logic.rod_tip_pos
         bobber_pos = self.bobber.pos
 
@@ -59,4 +60,5 @@ class FishingLine:
         return
 
     def get_line_points(self):
+        """Возвращает лист точек сегментов лески"""
         return self.line_points
