@@ -1,5 +1,5 @@
-import pytmx
 import pygame as pg
+import pytmx
 
 
 class TiledMap:

@@ -1,4 +1,5 @@
 import pygame as pg
+
 from settings import WHITE
 
 class MessageView:
@@ -13,8 +14,10 @@ class MessageView:
         title_w, title_h = self.title_surface.get_size()
         text_w, text_h = self.text_surface.get_size()
 
-        self.box_width = max(title_w, text_w) + 20
-        self.box_height = title_h + text_h + 20
+        box_offset = 20
+
+        self.box_width = max(title_w, text_w) + box_offset
+        self.box_height = title_h + text_h + box_offset
 
     def draw(self, screen, y_offset):
         alpha = int(self.model.alpha)
@@ -23,9 +26,13 @@ class MessageView:
 
         message_bg = pg.Surface((self.box_width, self.box_height), pg.SRCALPHA)
         message_bg.fill((255, 0, 0, alpha))
-        message_bg.blit(self.title_surface, (20, 5))
-        message_bg.blit(self.text_surface, (5, 10 + self.title_surface.get_height()))
 
-        x = screen.get_width() - self.box_width - 10
+        title_dest = pg.Vector2(20, 5)
+        text_dest = pg.Vector2(5, 10)
+        message_bg.blit(self.title_surface, title_dest)
+        message_bg.blit(self.text_surface, (text_dest.x, text_dest.y + self.title_surface.get_height()))
+
+        x_offset = -10
+        x = screen.get_width() - self.box_width + x_offset
         y = screen.get_height() - self.box_height - y_offset
         screen.blit(message_bg, (x, y))

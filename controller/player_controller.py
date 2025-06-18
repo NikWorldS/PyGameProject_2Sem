@@ -1,7 +1,8 @@
 import pygame as pg
 vec = pg.Vector2
 
-class InputHandler:
+
+class PlayerController:
     def __init__(self):
         pass
 
@@ -23,7 +24,3 @@ class InputHandler:
             delta_pos = delta_pos.normalize()
 
         player.move(delta_pos)
-
-
-    def inventory_handler(self, player):
-        pass
