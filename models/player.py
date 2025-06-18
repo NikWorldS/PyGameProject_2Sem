@@ -1,6 +1,11 @@
-from models.inventory import Inventory
-from settings import PLAYER_SPEED
 import pygame as pg
+
+from controller.float_rod_controller import FloatRodController
+from models.fishing_models.float_rod import FloatRod
+
+from models.inventory import Inventory
+from models.item_rod import ItemRod
+from settings import PLAYER_SPEED
 
 
 class Player(pg.sprite.Sprite):
@@ -9,13 +14,22 @@ class Player(pg.sprite.Sprite):
         super().__init__(self.groups)
         self.game = game
         self.pos = pg.Vector2(x, y)
+        self.hand_pos = pg.Vector2(0, 0)
         self.rect = pg.Rect(self.pos.x, self.pos.y, 32, 32)
         self.delta_pos = pg.Vector2(0, 0)
-        self.image = pg.image.load
-        self.inventory = Inventory(self.game.assets, push_alert=self.game.msg_manager.add_message)
+        self.inventory = Inventory(push_alert=self.game.msg_manager.add_message)
 
+        self.setup_starter_items()
 
-    def move(self, delta_pos):
+    def setup_starter_items(self):
+        self.inventory.add_item(
+            ItemRod('Поплавочка', 'fishing_rod',
+                    FloatRod('Поплавочка', 5, 5, (0, 0)),
+                    FloatRodController
+                    )
+        )
+
+    def move(self, delta_pos: pg.Vector2):
         self.delta_pos = delta_pos
         self.pos.x += self.delta_pos.x * PLAYER_SPEED * self.game.dt
         self.rect.topleft = self.pos
@@ -28,7 +42,7 @@ class Player(pg.sprite.Sprite):
         self.rect.topleft = self.pos
 
 
-    def collide_with_obstacle(self, direction):
+    def collide_with_obstacle(self, direction: str):
         hits = pg.sprite.spritecollide(self, self.game.obstacles, False)
         if hits:
             if direction == 'x':
@@ -46,7 +60,6 @@ class Player(pg.sprite.Sprite):
 
         self.rect.topleft = self.pos
 
-
     def update(self):
-        pass
-    #     self.inventory.update(self.game.screen)
+        offset = pg.Vector2(5, 8)
+        self.hand_pos = self.pos + offset

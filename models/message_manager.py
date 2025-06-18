@@ -1,6 +1,7 @@
+from collections import deque
+
 from models.message_model import MessageModel
 from view.message_view import MessageView
-from collections import deque
 
 class MessageManager:
     def __init__(self):
@@ -40,6 +41,7 @@ class MessageManager:
 
     def draw(self, screen):
         y_offset = 10
+        y_offset_between = 10
         for model, view in self.active:
             view.draw(screen, y_offset)
-            y_offset += view.box_height + 10
+            y_offset += view.box_height + y_offset_between

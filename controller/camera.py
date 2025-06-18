@@ -1,4 +1,5 @@
 import pygame as pg
+
 from settings import WIDTH, HEIGHT
 
 
@@ -14,8 +15,10 @@ class Camera:
         desired_x = -target.rect.centerx + WIDTH // 2
         desired_y = -target.rect.centery + HEIGHT // 2
 
-        self.offset.x += (desired_x - self.offset.x) * 0.03
-        self.offset.y += (desired_y - self.offset.y) * 0.03
+        smoothing_coif = 0.03
+
+        self.offset.x += (desired_x - self.offset.x) * smoothing_coif
+        self.offset.y += (desired_y - self.offset.y) * smoothing_coif
 
         self.offset.x = min(0, self.offset.x)
         self.offset.y = min(0, self.offset.y)
